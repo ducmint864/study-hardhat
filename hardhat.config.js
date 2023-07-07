@@ -5,7 +5,9 @@ require('hardhat-gas-reporter');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
+const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
 const PRIVATE_KEY = process.env.PRIVATE_KEY;
+
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
 
 module.exports = {
