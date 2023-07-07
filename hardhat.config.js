@@ -5,23 +5,15 @@ require('hardhat-gas-reporter');
 
 /** @type import('hardhat/config').HardhatUserConfig */
 
-const GOERLI_RPC_URL = process.env.GOERLI_RPC_URL;
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-
+const PRIVATE_KEY = process.env.PRIVATE_KEY || "";
 const SEPOLIA_RPC_URL = process.env.SEPOLIA_RPC_URL;
+const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY;
+const COINMARKETCAP_API_KEY = process.env.COINMARKETCAP_API_KEY;
 
 module.exports = {
     solidity: "0.8.18",
     // defaultNetwork: "",
     networks: {
-        goerli_testnet: {
-            url: process.env.GOERLI_RPC_URL,
-            accounts: [process.env.PRIVATE_KEY],
-            chainId: 5,
-            gas: 72000,
-            gasPrice: 3000000000000 // 3000 gwei
-        },
-
         sepolia_testnet: {
             url: SEPOLIA_RPC_URL,
             accounts: [PRIVATE_KEY],
@@ -47,7 +39,7 @@ module.exports = {
     gasReporter: {
         enabled: true,
         noColors: true,
-        // currency: 'USD',
-        // coinmarketcap: ,
+        currency: 'USD',
+        coinmarketcap: COINMARKETCAP_API_KEY
     }
 };
