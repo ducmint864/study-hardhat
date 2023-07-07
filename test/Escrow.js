@@ -2,7 +2,7 @@ const { ethers } = require("hardhat");
 const { assert, expect } = require("chai");
 const { Contract } = require("hardhat/internal/hardhat-network/stack-traces/model");
 
-describe("Escrow", function() {
+describe("Escrow", function () {
     let EscrowContractFactory
     let PriceLibraryFactory
     let Price;
@@ -10,7 +10,7 @@ describe("Escrow", function() {
     const testTask1 = "Hi, this is test task number 1";
     const testTask2 = "Hi, this is test task number 2";
 
-    beforeEach(async function() {
+    beforeEach(async function () {
         PriceLibraryFactory = await ethers.getContractFactory("Price");
         Price = await PriceLibraryFactory.deploy();
         EscrowContractFactory = await ethers.getContractFactory(
@@ -22,40 +22,35 @@ describe("Escrow", function() {
             }
         );
         Escrow = await EscrowContractFactory.deploy();
-        await Escrow.deployed(); 
+        await Escrow.deployed();
     })
 
     // Tested functions: addTask(), viewTask()
-    it("should be able to register new tasks", async function() {
+    it("should be able to register new tasks", async function () {
         await Escrow.addTask(testTask1);
         assert.equal(await Escrow.viewTask(), testTask1);
     })
 
     // Testted function: addTask(), viewTask()
-    it("should show only the most-recently added task", async function() {
+    it("should show only the most-recently added task", async function () {
         await Escrow.addTask(testTask1);
         await Escrow.addTask(testTask2);
         assert.equal(await Escrow.viewTask(), testTask1);
     })
 
     // Tested functions: addTask(), taskCount()
-    it("should show the correct number of tasks", async function() {
+    it("should show the correct number of tasks", async function () {
         await Escrow.addTask(testTask1);
         await Escrow.addTask(testTask2);
         assert.equal(await Escrow.taskCount(), 2);
     })
 
-    // Tested functions: fund(), viewBalance(), viewBalanceInUSD()
-    it("should update the balance correctly whenever it gets funded", async function() {
-        const amount = "1000000000000000000";
-        await Escrow.fund({value : amount});
-        assert.equal(await Escrow.viewBalanceInString(), amount);
+    // Tested functions: fund(), viewBalanceInString()
+    it("should update and show the correct the balance of escrow whenever it gets funded", async function () {
+        const expectedAmount = await ethers.BigNumber.from("1000000000000000000");
+        await Escrow.fund({ value: expectedAmount });
+        let tmp = await Escrow.viewBalanceInString();
+        const actualAmount = await ethers.BigNumber.from(tmp);
+        assert.isTrue(actualAmount.eq(expectedAmount));
     })
-
-
-    // // Tested function: startTask(), 
-    // it("should be able to start tasks successfully")
-    // {
-    //     if (tasks > 0) 
-    // }
 });
